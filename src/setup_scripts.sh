@@ -69,3 +69,15 @@ gcloud functions deploy image-validate-gcf \
 --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
 --trigger-event-filters="bucket=spooky-image-source" \
 --trigger-service-account="eventarc-trigger@ejmadkins-sky-tech-day.iam.gserviceaccount.com"
+
+docker build -t image-validate .
+docker tag image-validate europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-validate
+docker push europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-validate
+
+docker build -t image-resize .
+docker tag image-resize europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-resize
+docker push europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-resize
+
+docker build -t image-blur-resize .
+docker tag image-blur-resize europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-blur-resize
+docker push europe-west1-docker.pkg.dev/ejmadkins-sky-tech-day/spooky-images/image-blur-resize
