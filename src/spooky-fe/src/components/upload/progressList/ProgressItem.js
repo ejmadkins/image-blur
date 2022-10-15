@@ -2,19 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { ImageListItem, Box } from '@mui/material';
 import { CheckCircleOutline } from '@mui/icons-material';
 import CircularProgressWithLabel from './CicularProgressWithLabel';
+import { v4 as uuidv4 } from 'uuid';
+import uploadFileProgress from '../../../firebase/uploadFileProgress';
 
 const ProgressItem = ({ file }) => {
-  const [progress] = useState(100);
+  const [progress, setProgress] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
+  // const currentUser = { uid: 'userId' };
   useEffect(() => {
     if (file) {
+      console.log(file);
+      const uploadImage = async () => {
+        console.log(file);
+        const imageName = uuidv4() + '.' + file.name.split('.').pop();
+        try {
+          const url = await uploadFileProgress(file, 'source/', imageName, setProgress);
+          console.log(url);
+          setImageUrl(null);
+        } catch (error) {
+          alert(error.message);
+          console.log(error);
+        }
+      };
+      console.log('here');
       setImageUrl(URL.createObjectURL(file));
+      uploadImage();
     }
   }, [file]);
 
   return (
     <div>
-      {file && (
+      {imageUrl && (
         <ImageListItem cols={1} rows={1}>
           <img src={imageUrl} alt="gallery" loading="lazy" />
           <Box sx={backDrop}>

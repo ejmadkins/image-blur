@@ -1,4 +1,3 @@
-import React from 'react';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from './config';
 

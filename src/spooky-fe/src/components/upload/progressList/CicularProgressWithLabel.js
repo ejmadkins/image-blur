@@ -18,7 +18,7 @@ const CircularProgressWithLabel = ({ value }) => {
         }}
       >
         <Typography variant={'caption'} component={'div'} color={'white'} fontSize={'1rem'}>
-          {value}
+          {Math.round(value) + '%'}
         </Typography>
       </Box>
     </Box>
