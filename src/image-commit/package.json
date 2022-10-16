@@ -1,0 +1,39 @@
+{
+    "name": "image-blur",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon src/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ejmadkins/image-blur.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ejmadkins/image-blur/issues"
+    },
+    "homepage": "https://github.com/ejmadkins/image-blur#readme",
+    "dependencies": {
+        "@google-cloud/firestore": "^6.3.0",
+        "@google-cloud/storage": "^6.5.2",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "firebase": "^9.12.1",
+        "sharp": "^0.31.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.25.0",
+        "eslint-config-prettier": "^8.5.0",
+        "nodemon": "^2.0.20",
+        "prettier": "^2.7.1"
+    }
+}
