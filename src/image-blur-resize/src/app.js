@@ -6,37 +6,40 @@ const app = express()
 app.use(express.json())
 
 // Creates a client
-const storage = new Storage()
+const cloudStorage = new Storage()
 
 const THUMB_MAX_WIDTH = 200
 const THUMB_MAX_HEIGHT = 200
 
 app.post('/', async (req, res) => {
     try {
-        const thumbnailUploadStream = await storage
-            .bucket(`${req.body.bucket}-resized`)
-            .file(req.body.name)
-            .createWriteStream()
-            .on('finish', () => {
-                console.log('file upload complete')
-            })
+        const resourceName = req.body.name.slice(
+            req.body.name.indexOf('objects/') + 'objects/'.length
+        )
 
-        const pipeline = sharp()
-        await pipeline
-            .blur(2)
-            .resize(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT)
-            .pipe(thumbnailUploadStream)
+        const dstDirectory = resourceName.replace('source', 'resized')
 
-        await storage
+        console.log(`src file: ${resourceName}`)
+        console.log(typeof dstDirectory)
+        console.log(`dst file: ${dstDirectory}`)
+        console.log(typeof dstDirectory)
+
+        const downloadFile = await cloudStorage
             .bucket(req.body.bucket)
-            .file(req.body.name)
-            .createReadStream()
-            .pipe(pipeline)
-            .on('finish', () => {
-                console.log('file download complete')
-            })
+            .file(resourceName)
+            .download()
 
-        res.send('Image resized and blurred successfuly')
+        const resizeFile = await sharp(...downloadFile)
+            .blur(10)
+            .resize(THUMB_MAX_WIDTH, THUMB_MAX_HEIGHT)
+            .toBuffer()
+
+        await cloudStorage
+            .bucket(req.body.bucket)
+            .file(dstDirectory)
+            .save(resizeFile)
+
+        res.json({ name: dstDirectory })
     } catch (error) {
         res.status(400).send(error.message)
     }
