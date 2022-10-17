@@ -4,7 +4,7 @@ const sharp = require('sharp')
 const express = require('express')
 const app = express()
 const { ref, getDownloadURL } = require('firebase/storage')
-const { collection, addDoc } = require('firebase/firestore')
+const { collection, addDoc, serverTimestamp } = require('firebase/firestore')
 const { firebaseStorage, db } = require('../firebase/config')
 app.use(express.json())
 
@@ -34,6 +34,7 @@ app.post('/', async (req, res) => {
                 ).then(async (url) => {
                     await addDoc(collection(db, 'gallery'), {
                         image: url,
+                        timestamp: serverTimestamp(),
                     })
                     console.log(url)
                 })
